@@ -5,6 +5,7 @@ from aiogram.utils import executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher.storage import FSMContext
+from aiogram.types.web_app_info import WebAppInfo
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
@@ -58,8 +59,13 @@ async def get_city(message: Message, state: FSMContext):
 async def start_web_app(message: Message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add(types.KeyboardButton(
-        text='Открыть страницу анкеты', web_app=WebAppInfo(url='')))
+        text='Открыть страницу анкеты', web_app=WebAppInfo(url='https://egorskvor.github.io')))
+    await message.answer(text='Жми кнопку', reply_markup=markup)
 
 
+@dp.message_handler(content_types=['web_app_data'])
+async def get_data_from_web(message: Message):
+    print(message.web_app_data.data, type(message.web_app_data.data))
+    await message.answer(message.web_app_data.data)
 if __name__ == '__main__':
     executor.start_polling(dp)
