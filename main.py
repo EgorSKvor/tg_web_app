@@ -16,7 +16,7 @@ class AnketStates(StatesGroup):
     wait_fio = State()
     wait_napr = State()
     wait_age = State()
-    wait_time = State()
+    wait_whyYou = State()
 
 
 @dp.message_handler(text='Привет')
@@ -51,13 +51,13 @@ async def get_age(message: Message, state: FSMContext):
     data = await state.get_data()
     data['age'] = message.text
     await message.answer(text=f'Введите время')
-    await AnketStates.wait_time.set()
+    await AnketStates.wait_whyYou.set()
 
 
-@dp.message_handler(state=AnketStates.wait_time)
+@dp.message_handler(state=AnketStates.wait_whyYou)
 async def get_city(message: Message, state: FSMContext):
     data = await state.get_data()
-    data['time'] = message.text
+    data['whyYou'] = message.text
     print(data)
     await message.answer(text=f'Успешно\n{data}')
     await state.reset_state()
