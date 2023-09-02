@@ -6,6 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher.storage import FSMContext
 from aiogram.types.web_app_info import WebAppInfo
+from table_funcs import to_table
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
@@ -74,6 +75,8 @@ async def start_web_app(message: Message):
 @dp.message_handler(content_types=['web_app_data'])
 async def get_data_from_web(message: Message):
     print(message.web_app_data.data, type(message.web_app_data.data))
+    content = message.web_app_data.data
+    to_table(content)
     await message.answer(message.web_app_data.data)
 if __name__ == '__main__':
     executor.start_polling(dp)
