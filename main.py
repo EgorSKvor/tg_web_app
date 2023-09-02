@@ -14,7 +14,8 @@ dp = Dispatcher(bot=bot, storage=storage)
 
 class AnketStates(StatesGroup):
     wait_fio = State()
-    wait_city = State()
+    wait_napr = State()
+    wait_age = State()
     wait_time = State()
 
 
@@ -34,14 +35,21 @@ async def get_fio(message: Message, state: FSMContext):
     data = await state.get_data()
     data['fio'] = message.text
     await state.update_data(data)
-    await message.answer(text=f'Введите город')
-    await AnketStates.wait_city.set()
+    await message.answer(text=f'Введите направление обучения')
+    await AnketStates.wait_napr.set()
 
 
-@dp.message_handler(state=AnketStates.wait_city)
-async def get_city(message: Message, state: FSMContext):
+@dp.message_handler(state=AnketStates.wait_napr)
+async def get_napr(message: Message, state: FSMContext):
     data = await state.get_data()
-    data['city'] = message.text
+    data['napr'] = message.text
+    await message.answer(text=f'Введите дату рождения')
+    await AnketStates.wait_age.set()
+
+@dp.message_handler(state=AnketStates.wait_age)
+async def get_age(message: Message, state: FSMContext):
+    data = await state.get_data()
+    data['age'] = message.text
     await message.answer(text=f'Введите время')
     await AnketStates.wait_time.set()
 
